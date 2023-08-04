@@ -19,7 +19,7 @@ public class QUERY {
     private JButton actualizarButton;
     static final String DB_URL = "jdbc:mysql://localhost/POO"; // esta es la conexion con la base de datos
     static final String USER = "root"; //usuario
-    static final String PASS = "root_bas3"; // contraseña
+    static final String PASS = "Skarabus6"; // contraseña
     static final String QUERY = "select * from estudiantes"; // sentencia de sql (query)
 
     public QUERY() {
@@ -68,12 +68,19 @@ public class QUERY {
                             mostrar.setText("Estudiante eliminado");
                         }else{
                             mostrar.setText("No se encontro ninguno estudiante con ese ID!!! ");
+                            JOptionPane.showMessageDialog(marco,"No se encontro el Id!!!!!");
                         }
                     }
 
                 }catch (SQLException k){
                     k.printStackTrace();
                 }
+                id.setText(String.valueOf(""));
+                nombre.setText("");
+                edad.setText(String.valueOf(""));
+                ciudad.setText("");
+                cedula.setText(String.valueOf(""));
+                contra.setText("");
             }
         });
         insertarButton.addActionListener(new ActionListener() {
@@ -94,6 +101,7 @@ public class QUERY {
                             mostrar.setText("Estudiante insertado");
                         }else{
                             mostrar.setText("No se pudo insertart el usuario!!! ");
+                            JOptionPane.showMessageDialog(marco,"Verifique la id que no se repita!!!");
                         }
                     }
 
@@ -106,11 +114,18 @@ public class QUERY {
         actualizarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try(Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);){
-                    String query_delete = "update estudiantes set ciudad=? where id=?";
 
-                    try(PreparedStatement pstmt = conn.prepareStatement(query_delete)){
-                        pstmt.setInt(1, Integer.parseInt(id.getText()));
+                try(Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);){
+                    String query_UPDATE = "update estudiantes set nombre=?,edad=?,ciudad=?,cedula=?,contraseña=? where id=?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(query_UPDATE)){
+
+                        pstmt.setString(1,nombre.getText());
+                        pstmt.setInt(2, Integer.parseInt(edad.getText()));
+                        pstmt.setString(3,ciudad.getText());
+                        pstmt.setInt(4,Integer.parseInt(cedula.getText()));
+                        pstmt.setString(5,contra.getText());
+                        pstmt.setInt(6, Integer.parseInt(id.getText()));
                         int filasE=pstmt.executeUpdate();
                         if (filasE>0){
                             mostrar.setText("Informacion actualizada");
@@ -133,7 +148,6 @@ public class QUERY {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
 
     }
 }
